@@ -9,7 +9,9 @@ import dagger.android.support.AndroidSupportInjectionModule
 
 @Module(
     includes = [AndroidSupportInjectionModule::class
-        , ActivityBuildersModule::class]
+        , ActivityBuildersModule::class
+        , NetworkModule::class
+        , DatabaseModule::class]
 )
 abstract class AppModule {
 
@@ -18,5 +20,4 @@ abstract class AppModule {
 
     @Binds
     abstract fun provideApplication(app: TrendingRepoApplication): Application
-
 }
