@@ -1,8 +1,6 @@
 package com.gojek.trendingrepo
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import com.gojek.trendingrepo.utils.ActivityUtils
 import com.gojek.trendingrepo.view.home.RepoListFragment
 import dagger.android.AndroidInjection
@@ -24,17 +22,5 @@ class MainActivity : DaggerAppCompatActivity() {
                 , false
                 , RepoListFragment::class.simpleName
             )
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }

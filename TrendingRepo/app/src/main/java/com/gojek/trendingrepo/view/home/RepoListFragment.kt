@@ -3,9 +3,7 @@ package com.gojek.trendingrepo.view.home
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.gojek.trendingrepo.AppExecutors
@@ -41,6 +39,11 @@ class RepoListFragment : DaggerFragment() {
     private var mDialog: Dialog? = null
 
     //region Fragment Overridden Methods
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -67,12 +70,25 @@ class RepoListFragment : DaggerFragment() {
         initRecyclerView()
         observeViewEvents()
 
-        if (ConnectionUtils.isNetworkAvailable(context)) {
-            mViewModel.fetchTrendingRepositories(false)
-        } else {
-            mDialog?.dismiss()
-            showNoConnectionDialog()
-        }
+        mViewModel.fetchTrendingRepositories(false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater)
+        menuInflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return if (item.itemId == R.id.action_refresh) {
+            if (ConnectionUtils.isNetworkAvailable(context)) {
+                mDialog?.show()
+                mViewModel.fetchTrendingRepositories(true)
+            } else {
+                showNoConnectionDialog()
+            }
+            true
+        } else false
     }
 
     //endregion
@@ -107,9 +123,13 @@ class RepoListFragment : DaggerFragment() {
         mViewModel.mRepositoryLiveData?.observe(viewLifecycleOwner, Observer {
             if (it.status == Status.SUCCESS) {
                 val result = it.data as List<TrendingRepoEntity>
-                mAdapter.submitList(result)
 
-                mAdapter.notifyDataSetChanged()
+                if (result.isNotEmpty()) {
+                    mAdapter.submitList(result)
+                    mAdapter.notifyDataSetChanged()
+                } else {
+                    AppUtils.showSnackBar(ll_root, getString(R.string.txt_no_data))
+                }
                 mDialog?.dismiss()
             } else if (it.status == Status.ERROR) {
                 mDialog?.dismiss()

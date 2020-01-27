@@ -33,6 +33,18 @@ class MainActivityTest {
     fun mainActivityTest() {
         //simulate fetch of data
         Thread.sleep(5000)
+        testOnItemClick()
+
+        Thread.sleep(3000)
+
+        //perform swipe
+        testSwipeToRefresh()
+
+        //test Options Menu Click
+        testOptionsMenu()
+    }
+
+    private fun testOnItemClick() {
         val cardView = onView(
             allOf(
                 childAtPosition(
@@ -45,17 +57,50 @@ class MainActivityTest {
             )
         )
         cardView.perform(click())
+    }
 
-        Thread.sleep(3000)
-
-        //perform swipe
-
+    private fun testSwipeToRefresh() {
         onView(withId(R.id.swipe_refresh_layout))
             .perform(withCustomConstraints(swipeDown(), isDisplayingAtLeast(85)))
 
         Thread.sleep(3000)
+    }
+
+    private fun testOptionsMenu() {
+        Thread.sleep(300)
+
+        val overflowMenuButton = onView(
+            allOf(
+                withContentDescription("More options"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.toolbar),
+                        2
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        overflowMenuButton.perform(click())
 
 
+        Thread.sleep(250)
+
+        val appCompatTextView = onView(
+            allOf(
+                withId(R.id.title), withText("Refresh"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.content),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatTextView.perform(click())
     }
 
     private fun childAtPosition(

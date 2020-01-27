@@ -1,6 +1,7 @@
 package com.gojek.trendingrepo.view.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import com.gojek.trendingrepo.R
 import com.gojek.trendingrepo.databinding.ItemTrendingRepoBinding
 import com.gojek.trendingrepo.datasource.entity.TrendingRepoEntity
 import com.gojek.trendingrepo.vo.databoundadapter.DataBoundListAdapter
+
 
 class RepoListAdapter(
     appExecutors: AppExecutors,
@@ -32,19 +34,17 @@ class RepoListAdapter(
             }
         }) {
 
+    private var previousExpandedPosition = Int.MIN_VALUE
+    private var mExpandedPosition = Int.MIN_VALUE
+
     override fun createBinding(parent: ViewGroup, viewType: Int): ItemTrendingRepoBinding {
 
-        val binding = DataBindingUtil.inflate<ItemTrendingRepoBinding>(
+        return DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.item_trending_repo,
             parent,
             false
         )
-
-        binding.root.setOnClickListener {
-            callback?.invoke(binding.entity!!)
-        }
-        return binding
     }
 
     override fun bind(
@@ -53,5 +53,28 @@ class RepoListAdapter(
         position: Int
     ) {
         binding.entity = item
+
+        val isExpanded = position == mExpandedPosition
+        toggleViewGroup(position, isExpanded, binding)
+
+        binding.root.setOnClickListener {
+            callback?.invoke(binding.entity!!)
+
+            mExpandedPosition = if (isExpanded) Int.MIN_VALUE else position
+            notifyItemChanged(previousExpandedPosition)
+            notifyItemChanged(position)
+        }
+    }
+
+    private fun toggleViewGroup(
+        position: Int,
+        isExpanded: Boolean,
+        binding: ItemTrendingRepoBinding
+    ) {
+        binding.group.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        binding.root.isActivated = isExpanded
+
+        if (isExpanded)
+            previousExpandedPosition = position
     }
 }

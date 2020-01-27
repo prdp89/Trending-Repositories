@@ -5,7 +5,9 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import com.gojek.trendingrepo.R
+import com.google.android.material.snackbar.Snackbar
 
 class AppUtils {
 
@@ -21,6 +23,13 @@ class AppUtils {
             dialog.setCancelable(false)
             dialog.setCanceledOnTouchOutside(false)
             return dialog
+        }
+
+        fun showSnackBar(v: View?, snackBarText: String?) {
+            if (v == null || snackBarText == null) {
+                return
+            }
+            Snackbar.make(v, snackBarText, Snackbar.LENGTH_LONG).show()
         }
     }
 }

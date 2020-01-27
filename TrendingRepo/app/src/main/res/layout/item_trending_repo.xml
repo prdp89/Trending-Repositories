@@ -192,7 +192,7 @@
                 android:id="@+id/group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="tv_description,ll_language,ll_stars" />
+                app:constraint_referenced_ids="tv_description,ll_language,ll_stars,ll_forks" />
 
             <View
                 android:id="@+id/view_empty"
