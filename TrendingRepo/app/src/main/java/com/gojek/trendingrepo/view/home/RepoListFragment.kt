@@ -1,5 +1,6 @@
-package com.gojek.trendingrepo.home
+package com.gojek.trendingrepo.view.home
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +11,10 @@ import androidx.lifecycle.Observer
 import com.gojek.trendingrepo.AppExecutors
 import com.gojek.trendingrepo.R
 import com.gojek.trendingrepo.datasource.entity.TrendingRepoEntity
+import com.gojek.trendingrepo.utils.AppUtils
+import com.gojek.trendingrepo.utils.ConnectionUtils
 import com.gojek.trendingrepo.utils.autoCleared
+import com.gojek.trendingrepo.view.common.InternetConnectionDialog
 import com.gojek.trendingrepo.vo.Status
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
@@ -27,9 +31,14 @@ class RepoListFragment : DaggerFragment() {
     lateinit var mViewModel: RepoListViewModel
 
     @Inject
+    lateinit var mInternetConnectionDialog: InternetConnectionDialog
+
+    @Inject
     lateinit var mAppExecutors: AppExecutors
 
     private var mAdapter by autoCleared<RepoListAdapter>()
+
+    private var mDialog: Dialog? = null
 
     //region Fragment Overridden Methods
     override fun onAttach(context: Context) {
@@ -52,11 +61,18 @@ class RepoListFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mDialog = AppUtils.showLoadingDialog(context)
+
         subscribeToLiveData()
         initRecyclerView()
         observeViewEvents()
 
-        mViewModel.fetchTrendingRepositories(false)
+        if (ConnectionUtils.isNetworkAvailable(context)) {
+            mViewModel.fetchTrendingRepositories(false)
+        } else {
+            mDialog?.dismiss()
+            showNoConnectionDialog()
+        }
     }
 
     //endregion
@@ -65,6 +81,8 @@ class RepoListFragment : DaggerFragment() {
 
     private fun initRecyclerView() {
         val adapter = RepoListAdapter(mAppExecutors) {
+            //Added for Espresso Test
+            //Toast.makeText(context, "On Item Click : " + it.name, Toast.LENGTH_SHORT).show()
         }
         this.rv_repo_list.adapter = adapter
         this.mAdapter = adapter
@@ -72,7 +90,15 @@ class RepoListFragment : DaggerFragment() {
 
     private fun observeViewEvents() {
         swipe_refresh_layout.setOnRefreshListener {
-            mViewModel.fetchTrendingRepositories(true)
+            //Added for Espresso Test
+            //Toast.makeText(context, "On Refresh Called", Toast.LENGTH_SHORT).show()
+
+            if (ConnectionUtils.isNetworkAvailable(context)) {
+                mDialog?.show()
+                mViewModel.fetchTrendingRepositories(true)
+            } else {
+                showNoConnectionDialog()
+            }
             swipe_refresh_layout.isRefreshing = false
         }
     }
@@ -84,10 +110,29 @@ class RepoListFragment : DaggerFragment() {
                 mAdapter.submitList(result)
 
                 mAdapter.notifyDataSetChanged()
+                mDialog?.dismiss()
             } else if (it.status == Status.ERROR) {
-                //TODO: Error logging here and Related UI
+                mDialog?.dismiss()
+                showNoConnectionDialog()
             }
         })
     }
+
+    private fun showNoConnectionDialog() {
+        mInternetConnectionDialog.isCancelable = false
+        mInternetConnectionDialog.setViewModel(mViewModel)
+
+        mInternetConnectionDialog.setOnConfirmListener(object :
+            InternetConnectionDialog.OnConfirmListener {
+            override fun onConfirmClick() {
+                mDialog?.show()
+            }
+        })
+
+        mInternetConnectionDialog.show(
+            activity?.supportFragmentManager!!, InternetConnectionDialog::class.simpleName
+        )
+    }
+
     //endregion
 }

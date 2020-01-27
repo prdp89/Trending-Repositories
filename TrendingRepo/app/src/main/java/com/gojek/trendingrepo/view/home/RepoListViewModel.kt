@@ -1,4 +1,4 @@
-package com.gojek.trendingrepo.home
+package com.gojek.trendingrepo.view.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

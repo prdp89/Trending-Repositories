@@ -1,4 +1,4 @@
-package com.gojek.trendingrepo.home
+package com.gojek.trendingrepo.view.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -42,7 +42,7 @@ class RepoListAdapter(
         )
 
         binding.root.setOnClickListener {
-
+            callback?.invoke(binding.entity!!)
         }
         return binding
     }

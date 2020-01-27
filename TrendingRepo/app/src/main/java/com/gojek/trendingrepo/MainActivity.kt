@@ -3,8 +3,8 @@ package com.gojek.trendingrepo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.gojek.trendingrepo.home.RepoListFragment
 import com.gojek.trendingrepo.utils.ActivityUtils
+import com.gojek.trendingrepo.view.home.RepoListFragment
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 
@@ -21,7 +21,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 supportFragmentManager
                 , RepoListFragment.newInstance()
                 , R.id.container
-                , true
+                , false
                 , RepoListFragment::class.simpleName
             )
     }

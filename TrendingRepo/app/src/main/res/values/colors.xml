@@ -11,4 +11,6 @@
     <color name="colorDenseBlack">#25282B</color>
 
     <color name="border_Black">#E9EBED</color>
+
+    <color name="transparent">#00000000</color>
 </resources>
