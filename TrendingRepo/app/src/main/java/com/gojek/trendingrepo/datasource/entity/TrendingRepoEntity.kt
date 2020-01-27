@@ -16,5 +16,7 @@ data class TrendingRepoEntity(
     var forks: Int,
     var name: String,
     var stars: Int,
-    var url: String
+    var url: String,
+    var language: String? = null,
+    var languageColor: String? = null
 )

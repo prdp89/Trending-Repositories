@@ -47,7 +47,6 @@ class RepoListAdapter(
         return binding
     }
 
-
     override fun bind(
         binding: ItemTrendingRepoBinding,
         item: TrendingRepoEntity,

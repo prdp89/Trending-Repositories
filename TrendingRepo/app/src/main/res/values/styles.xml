@@ -61,7 +61,7 @@
     </style>
 
     <style name="TextStyle.Title.GoogleSans.Regular" parent="TextStyle">
-        <item name="android:textAppearance">@style/TextAppearance.Text.Roboto.Medium</item>
+        <item name="android:textAppearance">@style/TextAppearance.Text.GoogleSans.Regular</item>
         <item name="android:textSize">12sp</item>
     </style>
 
