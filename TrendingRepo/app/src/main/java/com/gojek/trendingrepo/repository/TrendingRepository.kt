@@ -39,6 +39,9 @@ class TrendingRepository @Inject constructor(
             }
 
             override fun saveCallResult(item: List<TrendingRepoEntity>) {
+
+                mAppDatabase.trendingRepoDao().deleteOldRepos()
+
                 if (item.isNotEmpty()) {
                     mAppDatabase.trendingRepoDao().insertTrendingRepoList(item)
                 }

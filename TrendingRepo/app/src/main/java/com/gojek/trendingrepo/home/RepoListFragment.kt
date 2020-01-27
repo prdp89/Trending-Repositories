@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.gojek.trendingrepo.AppExecutors
 import com.gojek.trendingrepo.R
 import com.gojek.trendingrepo.datasource.entity.TrendingRepoEntity
+import com.gojek.trendingrepo.utils.autoCleared
 import com.gojek.trendingrepo.vo.Status
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
@@ -23,6 +25,11 @@ class RepoListFragment : DaggerFragment() {
 
     @Inject
     lateinit var mViewModel: RepoListViewModel
+
+    @Inject
+    lateinit var mAppExecutors: AppExecutors
+
+    private var mAdapter by autoCleared<RepoListAdapter>()
 
     //region Fragment Overridden Methods
     override fun onAttach(context: Context) {
@@ -44,19 +51,39 @@ class RepoListFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         subscribeToLiveData()
+        initRecyclerView()
+        observeViewEvents()
 
         mViewModel.fetchTrendingRepositories(false)
     }
+
     //endregion
 
     //region Private Methods
+
+    private fun initRecyclerView() {
+        val adapter = RepoListAdapter(mAppExecutors) {
+        }
+        this.rv_repo_list.adapter = adapter
+        this.mAdapter = adapter
+    }
+
+    private fun observeViewEvents() {
+        swipe_refresh_layout.setOnRefreshListener {
+            mViewModel.fetchTrendingRepositories(true)
+            swipe_refresh_layout.isRefreshing = false
+        }
+    }
+
     private fun subscribeToLiveData() {
         mViewModel.mRepositoryLiveData?.observe(viewLifecycleOwner, Observer {
-
             if (it.status == Status.SUCCESS) {
                 val result = it.data as List<TrendingRepoEntity>
+                mAdapter.submitList(result)
 
+                mAdapter.notifyDataSetChanged()
             } else if (it.status == Status.ERROR) {
                 //TODO: Error logging here and Related UI
             }
