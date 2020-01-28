@@ -1,5 +1,6 @@
 package com.gojek.trendingrepo.utils
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -12,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 class AppUtils {
 
     companion object {
+        @SuppressLint("InflateParams")
         fun showLoadingDialog(context: Context?): Dialog {
             val dialog = Dialog(context!!)
             dialog.show()

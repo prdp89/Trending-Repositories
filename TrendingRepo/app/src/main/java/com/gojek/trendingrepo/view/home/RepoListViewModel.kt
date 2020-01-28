@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.gojek.trendingrepo.datasource.entity.TrendingRepoEntity
 import com.gojek.trendingrepo.repository.TrendingRepository
 import com.gojek.trendingrepo.utils.OpenForTesting
-import com.mindtree.igxbridge.traderapp.vo.Resource
+import com.gojek.trendingrepo.vo.Resource
 import javax.inject.Inject
 
 @OpenForTesting

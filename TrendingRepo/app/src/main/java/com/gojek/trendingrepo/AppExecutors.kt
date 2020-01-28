@@ -27,10 +27,6 @@ open class AppExecutors(
         return mDiskIO
     }
 
-    fun networkIO(): Executor {
-        return mNetworkIO
-    }
-
     fun mainThread(): Executor {
         return mMainThread
     }

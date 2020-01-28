@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.gojek.trendingrepo.AppExecutors
 import com.gojek.trendingrepo.vo.Status
-import com.mindtree.igxbridge.traderapp.vo.Resource
+import com.gojek.trendingrepo.vo.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

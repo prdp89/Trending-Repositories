@@ -10,7 +10,7 @@ import com.gojek.trendingrepo.datasource.service.ApiInterface
 import com.gojek.trendingrepo.util.InstantAppExecutors
 import com.gojek.trendingrepo.util.TestUtil
 import com.gojek.trendingrepo.vo.Status
-import com.mindtree.igxbridge.traderapp.vo.Resource
+import com.gojek.trendingrepo.vo.Resource
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule

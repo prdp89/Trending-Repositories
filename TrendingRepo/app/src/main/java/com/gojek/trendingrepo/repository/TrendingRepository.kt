@@ -11,7 +11,7 @@ import com.gojek.trendingrepo.datasource.service.NetworkBoundResourceRetrofit
 import com.gojek.trendingrepo.utils.ConnectionUtils
 import com.gojek.trendingrepo.utils.OpenForTesting
 import com.gojek.trendingrepo.utils.RateLimiter
-import com.mindtree.igxbridge.traderapp.vo.Resource
+import com.gojek.trendingrepo.vo.Resource
 import retrofit2.Call
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

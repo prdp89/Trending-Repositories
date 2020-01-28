@@ -33,9 +33,9 @@ class TrendingRepoApplication : DaggerApplication() {
 
         Thread.setDefaultUncaughtExceptionHandler { _, exception ->
             val sw = StringWriter()
-            val exceptionAsString = sw.toString()
 
             exception.printStackTrace(PrintWriter(sw))
+            val exceptionAsString = sw.toString()
 
             Log.e("  ---->  %s", exceptionAsString)
             Log.e("uncaughtException", ": Exception ENDS")

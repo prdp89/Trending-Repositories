@@ -1,6 +1,4 @@
-package com.mindtree.igxbridge.traderapp.vo
-
-import com.gojek.trendingrepo.vo.Status
+package com.gojek.trendingrepo.vo
 
 /**
  * A generic class that holds a value with its loading status.
