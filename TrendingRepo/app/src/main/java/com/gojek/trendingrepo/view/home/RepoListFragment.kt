@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.gojek.trendingrepo.AppExecutors
 import com.gojek.trendingrepo.R
@@ -15,6 +14,7 @@ import com.gojek.trendingrepo.utils.autoCleared
 import com.gojek.trendingrepo.view.common.InternetConnectionDialog
 import com.gojek.trendingrepo.vo.Status
 import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.repo_list_fragment.*
 import javax.inject.Inject
@@ -58,7 +58,7 @@ class RepoListFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as DaggerAppCompatActivity).setSupportActionBar(toolbar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,7 +128,10 @@ class RepoListFragment : DaggerFragment() {
                     mAdapter.submitList(result)
                     mAdapter.notifyDataSetChanged()
                 } else {
-                    AppUtils.showSnackBar(ll_root, getString(R.string.txt_no_data))
+                    if (ConnectionUtils.isNetworkAvailable(context))
+                        AppUtils.showSnackBar(ll_root, getString(R.string.txt_no_data))
+                    else
+                        showNoConnectionDialog()
                 }
                 mDialog?.dismiss()
             } else if (it.status == Status.ERROR) {
@@ -139,7 +142,7 @@ class RepoListFragment : DaggerFragment() {
     }
 
     private fun showNoConnectionDialog() {
-        mInternetConnectionDialog.isCancelable = false
+        mInternetConnectionDialog.isCancelable = mAdapter.itemCount > 0
         mInternetConnectionDialog.setViewModel(mViewModel)
 
         mInternetConnectionDialog.setOnConfirmListener(object :

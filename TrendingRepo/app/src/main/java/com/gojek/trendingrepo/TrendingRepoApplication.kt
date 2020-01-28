@@ -2,7 +2,6 @@ package com.gojek.trendingrepo
 
 import android.content.Context
 import android.util.Log
-import com.facebook.stetho.Stetho
 import com.gojek.trendingrepo.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -28,7 +27,7 @@ class TrendingRepoApplication : DaggerApplication() {
         super.onCreate()
 
         //used to monitor DB
-        Stetho.initializeWithDefaults(this)
+        //Stetho.initializeWithDefaults(this)
 
         mContext = applicationContext
 

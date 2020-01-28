@@ -9,12 +9,14 @@ import com.gojek.trendingrepo.datasource.entity.TrendingRepoEntity
 import com.gojek.trendingrepo.datasource.service.ApiInterface
 import com.gojek.trendingrepo.datasource.service.NetworkBoundResourceRetrofit
 import com.gojek.trendingrepo.utils.ConnectionUtils
+import com.gojek.trendingrepo.utils.OpenForTesting
 import com.gojek.trendingrepo.utils.RateLimiter
 import com.mindtree.igxbridge.traderapp.vo.Resource
 import retrofit2.Call
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@OpenForTesting
 class TrendingRepository @Inject constructor(
     private val mAppExecutors: AppExecutors
     , private val mContext: Context

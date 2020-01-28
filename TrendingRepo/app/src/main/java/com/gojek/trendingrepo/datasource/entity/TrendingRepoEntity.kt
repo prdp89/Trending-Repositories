@@ -19,4 +19,8 @@ data class TrendingRepoEntity(
     var url: String,
     var language: String? = null,
     var languageColor: String? = null
-)
+) {
+    companion object {
+        const val UNKNOWN_ID = -1
+    }
+}

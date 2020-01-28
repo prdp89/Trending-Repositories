@@ -18,6 +18,9 @@ interface TrendingRepoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrendingRepoList(trendingRepoEntityList: List<TrendingRepoEntity>)
 
+    @Query("SELECT * FROM trending_repo WHERE name = :name AND author = :author")
+    fun load(author: String, name: String): LiveData<TrendingRepoEntity>
+
     @Query("DELETE FROM trending_repo")
     fun deleteOldRepos()
 }
